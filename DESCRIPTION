@@ -1,0 +1,44 @@
+Package: Mescnet
+Type: Package
+Title: Maximum-Entropy Single-Cell Gene Network Construction and Benchmarking
+Version: 0.1.0
+Authors@R:
+    person(given = "Fanglabyaominghui",
+           role = c("aut", "cre"),
+           email = "429470425@qq.com")
+Description: Constructs context-specific gene programs from single-cell and
+    spatial transcriptomics data. Cells are aggregated into local metacells to
+    reduce expression sparsity, gene-gene relationships are estimated from both
+    marginal correlation and partial correlation, the two signals are combined
+    into a 'BayesCor' score, the association matrix is soft-thresholded into a
+    weighted network, and gene communities are detected with the Leiden
+    algorithm. The package also provides Seurat v5 compatible replacements for
+    hdWGCNA metacell and metaspot aggregation, and utilities for benchmarking
+    reconstructed networks against reference networks with EGAD.
+License: GPL (>= 3)
+Encoding: UTF-8
+Depends:
+    R (>= 4.1.0)
+Imports:
+    dplyr,
+    ggplot2,
+    graphics,
+    hdWGCNA,
+    igraph (>= 1.3.0),
+    magrittr,
+    ppcor,
+    Seurat,
+    SeuratObject (>= 5.0.0),
+    stats,
+    utils,
+    viridis
+Suggests:
+    AnnotationDbi,
+    EGAD,
+    org.Hs.eg.db,
+    WGCNA,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+RoxygenNote: 7.3.2
+URL: https://github.com/Fanglabyaominghui/Mescnet
+BugReports: https://github.com/Fanglabyaominghui/Mescnet/issues
