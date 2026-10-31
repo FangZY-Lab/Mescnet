@@ -50,9 +50,17 @@ including troubleshooting and the optional EGAD benchmark dependencies.
 ```r
 install.packages(c("remotes", "BiocManager", "Seurat"))
 
+# Required internally by Mescnet
+remotes::install_github("smorabit/hdWGCNA",
+                        dependencies = TRUE, upgrade = "never")
+
+# Optional: only for the ggNetView network figure
 remotes::install_github("Jiawang1209/ggNetView",
                         dependencies = TRUE, upgrade = "never")
+
+# Optional: only for UCell module-score plots
 BiocManager::install("UCell", ask = FALSE, update = FALSE)
+
 remotes::install_github("FangZY-Lab/Mescnet",
                         dependencies = TRUE, upgrade = "never")
 ```
@@ -161,7 +169,9 @@ network figure should match the exact adjacency passed to Leiden.
 
 Node colour indicates module membership and node transparency scales with
 absolute kME. The five highest-|kME| genes from each module are labelled, so the
-number of labels is up to `top_n × number_of_modules`.
+number of labels is up to `top_n × number_of_modules`. This figure uses the
+optional `ggNetView` visualization layer; the network and modules are created
+without it.
 
 ![Mescnet hub network](figures/MEscnet_ggNetView_Nature_Hubs.png)
 

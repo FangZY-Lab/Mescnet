@@ -21,19 +21,29 @@ Mescnet requires R >= 4.1 and Seurat v5 (`SeuratObject` >= 5.0.0).
 install.packages(c("remotes", "BiocManager", "Seurat"))
 ```
 
-### 2. Install optional visualization and scoring dependencies
+### 2. Install hdWGCNA and optional plotting packages
 
-The core network workflow does not require every optional package. Install the
-ones you need for the figures you plan to make.
+`hdWGCNA` is a required internal dependency: Mescnet uses it for metacell
+construction and WGCNA-style data structures. It is installed with the package
+dependencies, but you can install it explicitly first:
 
 ```r
-# Co-expression network visualization
+# Required by the Mescnet network workflow
+remotes::install_github("smorabit/hdWGCNA",
+                        dependencies = TRUE, upgrade = "never")
+
+# Optional: only needed for Plot_MEscnet_Network(), which uses ggNetView
+# for a more convenient and polished network layout.
 remotes::install_github("Jiawang1209/ggNetView",
                         dependencies = TRUE, upgrade = "never")
 
-# UCell module scores (Bioconductor)
+# Optional: only needed for UCell module-score plots
 BiocManager::install("UCell", ask = FALSE, update = FALSE)
 ```
+
+`ggNetView` is solely a visualization layer. It is not required to construct
+the association matrices, detect modules, run the heat map, or use the rest of
+the package.
 
 ### 3. Install Mescnet
 
@@ -126,47 +136,37 @@ Run the case study from the repository root after downloading the file:
 source("case-study/Mescnet_PBMC_case_study.R")
 ```
 
-The input object is available from the GitHub release:
+### Case-study outputs
 
-```r
-download.file(
-  paste0(
-    "https://github.com/FangZY-Lab/Mescnet/releases/download/",
-    "untagged-d0b110f2c48eeb2bfd42/pbmc.Rdata"
-  ),
-  destfile = "pbmc.Rdata",
-  mode = "wb"
-)
-```
-
-Run the case study from the repository root after downloading the file:
-
-```r
-source("case-study/Mescnet_PBMC_case_study.R")
-```
-
-The input object is available from the GitHub release:
-
-```r
-download.file(
-  paste0(
-    "https://github.com/FangZY-Lab/Mescnet/releases/download/",
-    "untagged-d0b110f2c48eeb2bfd42/pbmc.Rdata"
-  ),
-  destfile = "pbmc.Rdata",
-  mode = "wb"
-)
-```
-
-Run the case study from the repository root after downloading the file:
-
-```r
-source("case-study/Mescnet_PBMC_case_study.R")
-```
+**Cell-type UMAP**
 
 ![PBMC UMAP](case-study/figures/UMAP_PBMC_Nature.png)
 
+[PDF](case-study/figures/UMAP_PBMC_Nature.pdf)
+
+**UCell module scores on the UMAP**
+
+![Module feature plots](case-study/figures/FeaturePlot_Modules.png)
+
+[PDF](case-study/figures/FeaturePlot_Modules.pdf)
+
+**UCell module scores by cell type**
+
+![Module violin plots](case-study/figures/VlnPlot_Modules.png)
+
+[PDF](case-study/figures/VlnPlot_Modules.pdf)
+
+**Co-expression network and hub genes** (`ggNetView` optional visualization)
+
 ![Mescnet hub network](case-study/figures/MEscnet_ggNetView_Nature_Hubs.png)
+
+[PDF](case-study/figures/MEscnet_ggNetView_Nature_Hubs.pdf)
+
+**Hub-gene heat map**
+
+![Hub-gene heat map](case-study/figures/Figure_E_HubGenes_Heatmap.png)
+
+[PDF](case-study/figures/Figure_E_HubGenes_Heatmap.pdf)
 
 ## Key parameters
 
@@ -266,13 +266,19 @@ file argument to `NULL` to skip writing.
 | Task | Packages |
 | --- | --- |
 | Network construction | `Seurat`, `SeuratObject`, `hdWGCNA`, `ppcor`, `igraph` |
-| Core plotting | `ggplot2`, `patchwork`, `ggrepel`, `tidygraph`, `ggNetView` |
-| Module scores | `UCell` |
+| Basic plots | `ggplot2` |
+| Module-score plots (optional) | `UCell`, `patchwork` |
+| Network visualization (optional) | `ggNetView`, `tidygraph`, `ggrepel` |
 | Network benchmarking | `EGAD`, `AnnotationDbi`, `org.Hs.eg.db` |
 
-`hdWGCNA` is used internally for metacell and WGCNA-style data structures. It is
-one component of the workflow, not the only dependency; users do not need to
-load it explicitly for the standard Mescnet workflow.
+`hdWGCNA` is a required internal dependency used for metacell construction and
+WGCNA-style data structures. It is installed with the package dependencies;
+users do not need to run `library(hdWGCNA)` because Mescnet calls it through its
+namespace.
+
+`ggNetView` is not required for network construction or module detection. It is
+used only by `Plot_MEscnet_Network()` to provide a more convenient, polished
+network layout. Users who do not need that specific figure can skip it.
 
 ## Seurat v5 compatibility
 
