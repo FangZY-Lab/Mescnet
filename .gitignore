@@ -9,3 +9,10 @@ desktop.ini
 .vscode/
 .idea/
 __pycache__/
+*.Rdata
+*.rds
+case-study/data/
+*.tar.gz
+*.Rcheck/
+*.tar.gz
+*.Rcheck/

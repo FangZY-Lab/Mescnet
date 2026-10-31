@@ -13,7 +13,10 @@
 #'    scale-free topology criterion.
 #' 3. [`ComputeMEscnetModules()`] turns one of those association matrices into a
 #'    weighted graph and detects gene communities with the Leiden algorithm.
-#' 4. [`plot_metanet_auc()`] and [`run_wgcna_analysis()`] benchmark the resulting
+#' 4. [`Plot_UMAP()`], [`Plot_Module_Scores()`],
+#'    [`Plot_MEscnet_Network()`] and [`Plot_Hub_Heatmap()`] visualize cell
+#'    groups, module activity, network hubs and hub-gene expression.
+#' 5. [`plot_metanet_auc()`] and [`run_wgcna_analysis()`] benchmark the resulting
 #'    network against reference networks using EGAD.
 #'
 #' The package additionally exports Seurat v5 compatible replacements for
@@ -24,10 +27,14 @@
 #' `seurat_obj@misc$MEscnet`, and the active network is recorded in
 #' `seurat_obj@misc$active_MEscnet`.
 #'
+#' A complete PBMC workflow is available in the case study at
+#' <https://github.com/FangZY-Lab/Mescnet/tree/main/case-study>.
+#'
 #' @keywords internal
 "_PACKAGE"
 
-#' @importFrom magrittr %>%
+#' @importFrom stats median
+#' @importFrom stats reorder
 NULL
 
 # Column names used inside dplyr data-masking calls.

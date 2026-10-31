@@ -1,7 +1,7 @@
 #' Benchmark gene networks by EGAD neighbour-voting AUROC
 #'
 #' Scores each network in `result` by running Gene Ontology guided gene set
-#' analysis (GBA) with [EGAD::run_GBA()] and plots the resulting neighbour
+#' analysis (GBA) with `EGAD::run_GBA()` and plots the resulting neighbour
 #' voting AUROC distributions as violin + notched boxplots.
 #'
 #' @param result A named list of square gene-gene association (or topological
@@ -15,7 +15,7 @@
 #'   environment (for backwards compatibility with the original scripts).
 #' @param out_dir Directory the figure is written to. Pass `NULL` to skip
 #'   writing a file. Default `"."`.
-#' @param width,height Figure size in inches passed to [ggplot2::ggsave()].
+#' @param width,height Figure size in inches passed to `ggplot2::ggsave()`.
 #'   Defaults `8` and `6`.
 #'
 #' @return A list with

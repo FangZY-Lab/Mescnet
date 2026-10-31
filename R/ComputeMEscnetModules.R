@@ -19,7 +19,7 @@
 #'   Default `1`.
 #' @param seed Random seed used for the Leiden algorithm. Default `1234`.
 #' @param objective_function Objective function passed to
-#'   [igraph::cluster_leiden()]. One of `"modularity"` (default) or `"CPM"`.
+#'   `igraph::cluster_leiden()`. One of `"modularity"` (default) or `"CPM"`.
 #' @param n_iterations Number of Leiden iterations. Default `10`.
 #'
 #' @return The input Seurat object with the following added to

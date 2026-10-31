@@ -16,8 +16,8 @@
 #' @param dims Dimensions of `reduction` to use. `NULL` uses all dimensions
 #'   stored in the reduction.
 #' @param assay Assay to aggregate. `NULL` uses the default assay.
-#' @param slot,data Layer or slot holding the expression values. `layer` is used
-#'   with SeuratObject >= 5.0.0 and `slot` otherwise; both default to
+#' @param slot Seurat v4 slot holding the expression values. Default `"counts"`.
+#' @param layer Seurat v5 layer holding the expression values. Default
 #'   `"counts"`.
 #' @param mode Aggregation mode, either `"average"` (default) or `"sum"`.
 #' @param cells.use Optional vector of cells to restrict the aggregation to.
@@ -37,13 +37,13 @@
 #'   metacell parameters stored under `wgcna_name`.
 #'
 #' @details
-#' This function is a drop-in replacement for [hdWGCNA::MetacellsByGroups()] with
+#' This function is a drop-in replacement for `hdWGCNA::MetacellsByGroups()` with
 #' two differences:
 #'
 #' * the expression matrix is read with the `layer` argument when
 #'   `SeuratObject >= 5.0.0` is installed and with `slot` otherwise, so it works
 #'   on both Seurat v4 and v5 objects;
-#' * after merging, layers are joined with [SeuratObject::JoinLayers()] on
+#' * after merging, layers are joined with `SeuratObject::JoinLayers()` on
 #'   Seurat v5 objects, which is required before the metacell matrix can be
 #'   normalised and used for network inference.
 #'
@@ -160,7 +160,8 @@ MetacellsByGroups <- function(seurat_obj, group.by = c("seurat_clusters"), ident
     })
     names(seurat_list) <- groupings
 
-    metacell_list <- mapply(hdWGCNA:::ConstructMetacells, seurat_obj = seurat_list,
+    construct_metacells <- utils::getFromNamespace("ConstructMetacells", "hdWGCNA")
+    metacell_list <- mapply(construct_metacells, seurat_obj = seurat_list,
         name = groupings, meta = meta_list, MoreArgs = list(k = k,
             reduction = reduction, dims = dims, assay = assay,
             slot = slot, layer = layer, return_metacell = TRUE,

@@ -23,7 +23,7 @@
 #'   `wgcna_name`.
 #'
 #' @details
-#' This function is a drop-in replacement for [hdWGCNA::MetaspotsByGroups()].
+#' This function is a drop-in replacement for `hdWGCNA::MetaspotsByGroups()`.
 #' Compared with the hdWGCNA version it additionally:
 #'
 #' * writes the `ident.group` identity of each source group back into the
@@ -102,7 +102,8 @@ MetaspotsByGroups <- function(seurat_obj, group.by = c("seurat_clusters"), ident
   names(seurat_list) <- groupings
 
   # 屏蔽底层烦人的警告
-  metaspot_list <- suppressWarnings(mapply(hdWGCNA:::ConstructMetaspots, cur_seurat = seurat_list,
+  construct_metaspots <- utils::getFromNamespace("ConstructMetaspots", "hdWGCNA")
+  metaspot_list <- suppressWarnings(mapply(construct_metaspots, cur_seurat = seurat_list,
                                            MoreArgs = list(mode = mode, assay = assay, slot = slot, layer = layer)))
   names(metaspot_list) <- groupings
 

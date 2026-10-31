@@ -1,3 +1,33 @@
+# Mescnet 0.2.0
+
+## New plotting API
+
+* Added `Plot_UMAP()` for publication-style UMAPs with axis arrows and optional
+  named palettes.
+* Added `Plot_Module_Scores()` for UCell module scores, feature plots, and
+  grouped violin plots.
+* Added `Plot_MEscnet_Network()` for module-coloured networks with kME-scaled
+  node transparency and per-module hub-gene labels.
+* Added `Plot_Hub_Heatmap()` for heat maps of the top hub genes from each
+  module across selected cell groups.
+* Added `Mescnet_colors()` for a consistent high-contrast plotting palette.
+
+## Case study and documentation
+
+* Added a runnable PBMC case study in `case-study/`, including the master
+  script, parameter guide, input-data instructions, and all result figures.
+* Reworked the README so installation is the first step and dependencies are
+  organized by task. hdWGCNA is documented as one internal dependency rather
+  than the organizing principle of the package.
+* Added an explicit mapping from `ComputeMEscnetModules(number = )` to the
+  association matrix used for module detection.
+* Clarified that `top_n` is the number of hub genes selected per module.
+
+## Fixes
+
+* Corrected the PBMC example so `module_genes1` is defined from
+  `seurat_obj@misc$MEscnet$MEscnet_modules$gene_lists` before plotting.
+
 # Mescnet 0.1.0
 
 First release, packaging the network-construction and benchmarking functions

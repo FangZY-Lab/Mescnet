@@ -81,7 +81,7 @@ CreaterMEscnet <- function(
 ) {
 
   if (!is.null(gene_list)) {
-    # 如果提供了gene_list，使用它设置WGCNA
+    # Use a supplied gene list when one is provided
     seurat_obj <- hdWGCNA::SetupForWGCNA(
       seurat_obj,
       gene_select = "custom",
@@ -90,7 +90,7 @@ CreaterMEscnet <- function(
     )
     message("WGCNA set up with provided gene_list.")
   } else {
-    # 如果未提供gene_list，计算高变基因
+    # Otherwise select highly variable genes
     seurat_obj <- Seurat::FindVariableFeatures(seurat_obj, selection.method = "vst", nfeatures = nfeatures)
     var_genes <- Seurat::VariableFeatures(seurat_obj)
     seurat_obj <- hdWGCNA::SetupForWGCNA(
@@ -102,7 +102,7 @@ CreaterMEscnet <- function(
     message("WGCNA set up with ", length(var_genes), " variable genes.")
   }
 
-  # 通过 group.by 创建 metacells
+  # Build metacells within the groups defined by group.by
   seurat_obj <- MetacellsByGroups(
     seurat_obj = seurat_obj,
     group.by = group.by,
@@ -113,10 +113,10 @@ CreaterMEscnet <- function(
     target_metacells = target_metacells
   )
 
-  # 归一化 metacell 表达矩阵
+  # Normalise the metacell expression matrix
   seurat_obj <- hdWGCNA::NormalizeMetacells(seurat_obj)
 
-  # 设置 DatExpr
+  # Set DatExpr
   seurat_obj <- hdWGCNA::SetDatExpr(
     seurat_obj,
     group_name = group_name,
@@ -187,7 +187,7 @@ CreaterMEscnet_data <- function(
     message("WGCNA set up with ", length(var_genes), " variable genes.")
   }
 
-  # 通过 group.by 创建 metacells（使用 data 层）
+  # Build metacells from the data layer
   seurat_obj <- MetacellsByGroups(
     seurat_obj = seurat_obj,
     group.by = group.by,
@@ -199,11 +199,11 @@ CreaterMEscnet_data <- function(
     target_metacells = target_metacells
   )
 
-  # 用 counts 覆盖 data 层，使 DatExpr 建立在原始 counts 上
+  # Use counts for DatExpr in this variant
   seurat_obj@misc$MEscnet$wgcna_metacell_obj@assays$RNA$data <-
     seurat_obj@misc$MEscnet$wgcna_metacell_obj@assays$RNA$counts
 
-  # 设置 DatExpr
+  # Set DatExpr
   seurat_obj <- hdWGCNA::SetDatExpr(
     seurat_obj,
     group_name = group_name,
@@ -223,7 +223,7 @@ CreaterMEscnet_data <- function(
 # ---------------------------------------------------------------------------
 .Mescnet_rename_wgcna_slots <- function(seurat_obj) {
 
-  # 确保 active network 指向 MEscnet
+  # Point the active network at MEscnet
   if ("active_wgcna" %in% names(seurat_obj@misc)) {
     seurat_obj@misc$active_MEscnet <- seurat_obj@misc$active_wgcna
     seurat_obj@misc$active_wgcna <- NULL
@@ -231,13 +231,13 @@ CreaterMEscnet_data <- function(
     message("active_wgcna not exist")
   }
 
-  # 确保 MEscnet 存在
+  # Check that the MEscnet state exists
   if (!("MEscnet" %in% names(seurat_obj@misc))) {
-    message("MEscnet 不存在于 Seurat 对象的 @misc 列表中")
+    message("The MEscnet state was not found in the Seurat @misc list")
     return(seurat_obj)
   }
 
-  # 依次重命名子元素
+  # Rename the hdWGCNA-style sub-elements
   renames <- c(
     wgcna_genes         = "MEscnet_genes",
     wgcna_params        = "MEscnet_params",

@@ -7,7 +7,12 @@ test_that("the public API is exported", {
     "plot_metanet_auc",
     "run_wgcna_analysis",
     "MetacellsByGroups",
-    "MetaspotsByGroups"
+    "MetaspotsByGroups",
+    "Plot_UMAP",
+    "Plot_Module_Scores",
+    "Plot_MEscnet_Network",
+    "Plot_Hub_Heatmap",
+    "Mescnet_colors"
   )
   for (f in funs) {
     expect_true(is.function(get(f, envir = asNamespace("Mescnet"))), info = f)
@@ -22,6 +27,37 @@ test_that("the magrittr pipe is re-exported", {
 test_that("MetacellsByGroups and MetaspotsByGroups expose the hdWGCNA signature", {
   expect_true("wgcna_name" %in% names(formals(MetacellsByGroups)))
   expect_true("min_spots" %in% names(formals(MetaspotsByGroups)))
+})
+
+test_that("Mescnet_colors validates its input and returns hexadecimal colours", {
+  expect_identical(Mescnet_colors(0), character())
+  expect_length(Mescnet_colors(3), 3)
+  expect_length(Mescnet_colors(25), 25)
+  expect_true(all(grepl("^#", Mescnet_colors(3))))
+  expect_error(Mescnet_colors(-1), "non-negative")
+  expect_error(Mescnet_colors(1.5), "non-negative")
+})
+
+test_that("plotting functions expose the documented hub-selection parameters", {
+  expect_identical(formals(Plot_MEscnet_Network)$top_n, 5)
+  expect_identical(formals(Plot_Hub_Heatmap)$top_n, 5)
+  expect_true("target_cells" %in% names(formals(Plot_Hub_Heatmap)))
+  expect_true("gene_list" %in% names(formals(CreaterMEscnet)))
+})
+
+test_that("hub genes are selected per module by absolute kME", {
+  kme <- data.frame(
+    Module1 = c(0.1, -0.9, 0.5, 0.2),
+    Module2 = c(-0.8, 0.1, 0.3, 0.7),
+    row.names = paste0("gene", 1:4)
+  )
+  modules <- list(c("gene1", "gene2", "gene3"), c("gene4"))
+
+  hubs <- Mescnet:::.Mescnet_hub_genes(
+    kme, modules, rownames(kme), top_n = 2
+  )
+
+  expect_identical(hubs, c("gene2", "gene3", "gene4"))
 })
 
 # Minimal S4 stand-in so the association-matrix code can be exercised without
